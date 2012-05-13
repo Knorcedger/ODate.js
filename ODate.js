@@ -17,12 +17,12 @@ var ODate;
 
 		this.locale = "en";
 		this.regional = {};
-		this.regional["en"] = {};
-		this.regional["en"].dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-		this.regional["en"].dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-		//this.regional["en"].dayNamesMin = ["Su","Mo","Tu","We","Th","Fr","Sa"];
-		this.regional["en"].monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		this.regional["en"].monthNames = ["January", "February", "March", "April", "May", "June", "July", "AUgust", "September", "October", "November", "December"];
+		this.regional.en = {};
+		this.regional.en.dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+		this.regional.en.dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+		//this.regional.en.dayNamesMin = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+		this.regional.en.monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		this.regional.en.monthNames = ["January", "February", "March", "April", "May", "June", "July", "AUgust", "September", "October", "November", "December"];
 	};
 
 	/**
