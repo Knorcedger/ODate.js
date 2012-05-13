@@ -42,7 +42,17 @@ var ODate;
 	 * @param {NUmber} days   The days to add. Must be integer
 	 */
 	ODate.prototype.date = function(years, months, days) {
-		this._dateObject = new Date(this._todayObject.getFullYear() + parseInt(years, 10), this._todayObject.getMonth() + parseInt(months, 10), this._todayObject.getDate() + parseInt(days, 10));
+		var yearsToAdd = years && parseInt(years, 10) || 0;
+		var monthsToAdd = months && parseInt(months, 10) || 0;
+		var daysToAdd = days && parseInt(days, 10) || 0;
+		
+		this._dateObject = new Date(this._todayObject.getFullYear() + yearsToAdd, this._todayObject.getMonth() + monthsToAdd, this._todayObject.getDate() + daysToAdd);
+
+		return this;
+	};
+
+	ODate.prototype.addYears = function(years) {
+		this._dateObject = new Date(this._todayObject.getFullYear() + parseInt(years, 10), this._todayObject.getMonth(), this._todayObject.getDate());
 
 		return this;
 	};
