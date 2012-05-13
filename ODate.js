@@ -9,8 +9,11 @@ var ODate;
 	 * An object that provides usefull functions with dates
 	 */
 	ODate = function() {
-		this._todayString = this._findTodayDate();
+		// set defaults
 		this._todayObject = new Date();
+		this._dateObject = new Date();
+
+		this.dateFormat = "dd/mm/yyyy";
 
 		this.locale = "en";
 		this.regional = {};
@@ -23,50 +26,57 @@ var ODate;
 	};
 
 	/**
-	 * Updates the todayDate used
-	 * @param {String} todayDate A date in a format like: "08/05/2012"
+	 * Updates the todayDate object
+	 * @param {Number} year
+	 * @param {Number} month
+	 * @param {Number} day
 	 */
-	ODate.prototype.setToday = function(todayString) {
-		var today = todayString;
-		this._todayString = todayString;
-
-		this._updateTodayObject(todayString);
+	ODate.prototype.setToday = function(year, month, day) {
+		this._todayObject = new Date(year, month, day);
 	};
 
 	/**
-	 * Returns the today date as it is currenctly saved in the object
-	 * @return {string}
+	 * Adds years, months and days to today. Negative numbers can also be used
+	 * @param {Number} years  The years to add. Must be integer
+	 * @param {Number} months The months to add. Must be integer
+	 * @param {NUmber} days   The days to add. Must be integer
 	 */
-	ODate.prototype.today = function() {
-		return this._todayString;
+	ODate.prototype.date = function(years, months, days) {
+		this._dateObject = new Date(this._todayObject.getFullYear() + parseInt(years, 10), this._todayObject.getMonth() + parseInt(months, 10), this._todayObject.getDate() + parseInt(days, 10));
+
+		return this;
 	};
 
 	/**
-	 * Returns the yesterday date in this format: "08/05/2012"
+	 * Returns the date as a string formatted based on date format setting
 	 * @return {String}
 	 */
-	ODate.prototype.yesterday = function() {
-		var yesterday = new Date();
-		yesterday.setDate(this._todayObject.getDate() - 1);
-
-		var yesterdayDate = this._addZero(yesterday.getDate()) + "/" + this._addZero(yesterday.getMonth() + 1) + "/" + yesterday.getFullYear();
-
-		return yesterdayDate;
+	ODate.prototype.toString = function() {
+		return this.formatDate(this._dateObject, this.dateFormat);
 	};
 
 	/**
-	 * Returns the one month back date in this format: "08/05/2012"
-	 * @return {String}
+	 * Returns the date
+	 * @return {Number}
 	 */
-	ODate.prototype.oneMonthBack = function() {
-		var daysInPreviousMonth = this.daysInMonth(this._todayObject.getMonth(), this._todayObject.getFullYear());
+	ODate.prototype.getDate = function() {
+		return this._dateObject.getDate();
+	};
 
-		var oneMonthBack = new Date();
-		oneMonthBack.setDate(-(daysInPreviousMonth - this._todayObject.getDate()));
+	/**
+	 * Returns the month (0-11)
+	 * @return {Number}
+	 */
+	ODate.prototype.getMonth = function() {
+		return this._dateObject.getMonth();
+	};
 
-		var oneMonthBackDate = this._addZero(oneMonthBack.getDate()) + "/" + this._addZero(oneMonthBack.getMonth() + 1) + "/" + oneMonthBack.getFullYear();
-
-		return oneMonthBackDate;
+	/**
+	 * Returns the full year (4 digits)
+	 * @return {Number}
+	 */
+	ODate.prototype.getFullYear = function() {
+		return this._dateObject.getFullYear();
 	};
 
 	/**
@@ -86,18 +96,18 @@ var ODate;
 	 * @return {String}            The formatted date
 	 */
 	ODate.prototype.formatDate = function(dateObject, format) {
-
-		var expressions = ["dddd", "ddd", "dd", "d", "mmmm", "mmm", "mm", "m", "yyyy"];
+		var expressions = ["dddd", "ddd", "dd", "d", "mmmm", "mmm", "mm", "m", "yyyy", "yy"];
 		var replacements = [
 				this.regional[this.locale].dayNames[dateObject.getDay()], 
 				this.regional[this.locale].dayNamesShort[dateObject.getDay()], 
 				this._addZero(dateObject.getDate()), 
-				dateObject.getDate(), 
-				this.regional[this.locale].monthNames[dateObject.getMonth()], 
-				this.regional[this.locale].monthNamesShort[dateObject.getMonth()],
-				this._addZero(dateObject.getMonth()), 
+				dateObject.getDate() + 1, 
+				this.regional[this.locale].monthNames[dateObject.getMonth() + 1], 
+				this.regional[this.locale].monthNamesShort[dateObject.getMonth() + 1],
+				this._addZero(dateObject.getMonth() + 1), 
 				dateObject.getMonth(), 
-				dateObject.getFullYear()
+				dateObject.getFullYear(),
+				dateObject.getFullYear().toString().substring(2, 4)
 			];
 
 		var result = format;
@@ -112,28 +122,6 @@ var ODate;
 		}
 
 		return result;
-	};
-
-	/**
-	 * Create a date object from the given date string
-	 * @return {Object} A date object
-	 */
-	ODate.prototype._updateTodayObject = function(newDate) {
-		var dateArray = newDate.split("/");
-		var todayObject = new Date(dateArray[2], dateArray[1], dateArray[0]);
-
-		this._todayObject = todayObject;
-	};
-
-	/**
-	 * Returns the today date in this format: "08/05/2012"
-	 * @return {String}
-	 */
-	ODate.prototype._findTodayDate = function() {
-		var today = new Date();
-		var todayDate = this._addZero(today.getDate()) + "/" + this._addZero(today.getMonth() + 1) + "/" + today.getFullYear();
-
-		return todayDate;
 	};
 
 	/**
@@ -152,8 +140,3 @@ var ODate;
 		return result;
 	};
 }());
-
-
-var d = new ODate();
-console.log(d.formatDate(new Date(), "dddd/mm/yyyy"));
-//d.setLocalization.monthNames("");
