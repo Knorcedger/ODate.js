@@ -51,12 +51,6 @@ var ODate;
 		return this;
 	};
 
-	ODate.prototype.addYears = function(years) {
-		this._dateObject = new Date(this._todayObject.getFullYear() + parseInt(years, 10), this._todayObject.getMonth(), this._todayObject.getDate());
-
-		return this;
-	};
-
 	/**
 	 * Returns the date as a string formatted based on date format setting
 	 * @return {String}
