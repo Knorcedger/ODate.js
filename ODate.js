@@ -105,7 +105,7 @@ var ODate;
 				this.regional[this.locale].dayNames[dateObject.getDay()], 
 				this.regional[this.locale].dayNamesShort[dateObject.getDay()], 
 				this._addZero(dateObject.getDate()), 
-				dateObject.getDate() + 1, 
+				dateObject.getDate(), 
 				this.regional[this.locale].monthNames[dateObject.getMonth() + 1], 
 				this.regional[this.locale].monthNamesShort[dateObject.getMonth() + 1],
 				this._addZero(dateObject.getMonth() + 1), 
