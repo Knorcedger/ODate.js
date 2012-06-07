@@ -2,11 +2,11 @@
 
 /**
  * A date library providing useful date functions around a today date.
- * 
+ *
  * @author Achilleas Tsoumitas (https://twitter.com/#!/knorcedger)
  * @version 1.0.0
  * @source https://github.com/Knorcedger/ODate.js
- * 
+ *
  * @licence http://creativecommons.org/licenses/by/3.0/
  */
 
@@ -28,12 +28,14 @@ var ODate;
 	ODate.prototype.dateFormat = "dd/mm/yyyy";
 
 	ODate.prototype.locale = "en";
-	ODate.prototype.regional = {};
-	ODate.prototype.regional.en = {};
-	ODate.prototype.regional.en.dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	ODate.prototype.regional.en.dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-	ODate.prototype.regional.en.monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-	ODate.prototype.regional.en.monthNames = ["January", "February", "March", "April", "May", "June", "July", "AUgust", "September", "October", "November", "December"];
+	ODate.prototype.regional = {
+		"en": {
+			"dayNames": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+			"dayNamesShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+			"monthNamesShort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+			"monthNames": ["January", "February", "March", "April", "May", "June", "July", "AUgust", "September", "October", "November", "December"]
+		}
+	};
 
 	/**
 	 * Updates the todayDate object
@@ -55,7 +57,7 @@ var ODate;
 		var yearsToAdd = years && parseInt(years, 10) || 0;
 		var monthsToAdd = months && parseInt(months, 10) || 0;
 		var daysToAdd = days && parseInt(days, 10) || 0;
-		
+
 		return this._formatDate(new Date(this._dateObject.getFullYear() + yearsToAdd, this._dateObject.getMonth() + monthsToAdd, this._dateObject.getDate() + daysToAdd));
 	};
 
@@ -87,18 +89,20 @@ var ODate;
 			"n": date.getMonth() + 1,
 			"Y": date.getFullYear(),
 			"y": date.getFullYear().toString().substring(2, 4)
-		}
+		};
 
 		var result = this.dateFormat;
 		var format = this.dateFormat;
 
 		for (var property in expressions) {
-			var regEx = new RegExp(property + "[\b]?", "g");
-			if (regEx.test(format)) {
-				result = result.replace(property, expressions[property]);
-				format = format.replace(property, "");
+			if (expressions.hasOwnProperty(property)) {
+				var regEx = new RegExp(property + "[\b]?", "g");
+				if (regEx.test(format)) {
+					result = result.replace(property, expressions[property]);
+					format = format.replace(property, "");
+				}
 			}
-		};
+		}
 
 		return result;
 	};
