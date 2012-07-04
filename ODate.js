@@ -4,7 +4,7 @@
  * A date library providing useful date functions around a today date.
  *
  * @author Achilleas Tsoumitas (https://twitter.com/#!/knorcedger)
- * @version 1.0.0
+ * @version 1.1.0
  * @source https://github.com/Knorcedger/ODate.js
  *
  * @licence http://creativecommons.org/licenses/by/3.0/
@@ -79,32 +79,61 @@ var ODate;
 	ODate.prototype._formatDate = function(date) {
 
 		var expressions = {
-			"D": this.regional[this.locale].dayNames[date.getDay()],
-			"l": this.regional[this.locale].dayNamesShort[date.getDay()],
-			"d": this._addZero(date.getDate()),
-			"j": date.getDate(),
-			"F": this.regional[this.locale].monthNames[date.getMonth()],
-			"M": this.regional[this.locale].monthNamesShort[date.getMonth() + 1],
-			"m": this._addZero(date.getMonth() + 1),
-			"n": date.getMonth() + 1,
-			"Y": date.getFullYear(),
-			"y": date.getFullYear().toString().substring(2, 4)
+			"dddd": this.regional[this.locale].dayNames[date.getDay()],
+			"ddd": this.regional[this.locale].dayNamesShort[date.getDay()],
+			"dd": this._addZero(date.getDate()),
+			"d": date.getDate(),
+			"mmmm": this.regional[this.locale].monthNames[date.getMonth()],
+			"mmm": this.regional[this.locale].monthNamesShort[date.getMonth() + 1],
+			"mm": this._addZero(date.getMonth() + 1),
+			"m": date.getMonth() + 1,
+			"yyyy": date.getFullYear(),
+			"yy": date.getFullYear().toString().substring(2, 4)
 		};
 
-		var result = this.dateFormat;
-		var format = this.dateFormat;
-
+		//create the regular expression to replace the dateformat with actual data
+		//add the first one and the for loop for the rest
+		var regEx = new RegExp("(dddd)", "g");
+		var i = 0;
 		for (var property in expressions) {
 			if (expressions.hasOwnProperty(property)) {
-				var regEx = new RegExp(property + "[\b]?", "g");
-				if (regEx.test(format)) {
-					result = result.replace(property, expressions[property]);
-					format = format.replace(property, "");
+				if (i > 0) {
+					var temp = new RegExp(property, "g");
+					regEx = new RegExp(regEx.source + "|(" + temp.source + ")", "g");
 				}
+				i++;
 			}
 		}
 
-		return result;
+		/**
+		 * Replaces the expressions found
+		 */
+
+		function convert(str, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, offset, s) {
+			if (p1) {
+				return expressions.dddd;
+			} else if (p2) {
+				return expressions.ddd;
+			} else if (p3) {
+				return expressions.dd;
+			} else if (p4) {
+				return expressions.d;
+			} else if (p5) {
+				return expressions.mmmm;
+			} else if (p6) {
+				return expressions.mmm;
+			} else if (p7) {
+				return expressions.mm;
+			} else if (p8) {
+				return expressions.m;
+			} else if (p9) {
+				return expressions.yyyy;
+			} else if (p10) {
+				return expressions.yy;
+			}
+		}
+
+		return this.dateFormat.replace(regEx, convert);
 	};
 
 	/**
