@@ -9,3 +9,4 @@ TODO
 4. Difference between today and a given date
 5. add today and a given date DONE
 6. Add licence and copyright, version etc.
+7. 
