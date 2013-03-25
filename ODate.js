@@ -1,5 +1,3 @@
-/*jshint smarttabs: true*/
-
 /**
  * A date library providing useful date functions around a today date.
  *
@@ -10,22 +8,20 @@
  * @licence http://creativecommons.org/licenses/by/3.0/
  */
 
-var ODate;
-
 (function() {
 	"use strict";
 
 	/**
 	 * The constructor that also defines some default values
 	 */
-	ODate = function() {};
+	this.ODate = function() {};
 
 	/**
-	 * Set defaults
+	 * Set default privates
 	 */
-	ODate.prototype._dateObject = new Date();
 
-	ODate.prototype.dateFormat = "dd/mm/yyyy";
+	var dateObject = new Date(),
+		dateFormat = "dd/mm/yyyy";
 
 	ODate.prototype.locale = "en";
 	ODate.prototype.regional = {
@@ -38,13 +34,26 @@ var ODate;
 	};
 
 	/**
+	 * Sets and gets the date format
+	 */
+	ODate.prototype.format = {
+		get: function() {
+			return dateFormat;
+		},
+		set: function(format) {
+			dateFormat = format;
+		}
+	}
+
+
+	/**
 	 * Updates the todayDate object
 	 * @param {Number} year
 	 * @param {Number} month
 	 * @param {Number} day
 	 */
 	ODate.prototype.setToday = function(year, month, day) {
-		this._dateObject = new Date(year, month, day);
+		dateObject = new Date(year, month, day);
 	};
 
 	/**
@@ -58,34 +67,41 @@ var ODate;
 		var monthsToAdd = months && parseInt(months, 10) || 0;
 		var daysToAdd = days && parseInt(days, 10) || 0;
 
-		return this._formatDate(new Date(this._dateObject.getFullYear() + yearsToAdd, this._dateObject.getMonth() + monthsToAdd, this._dateObject.getDate() + daysToAdd));
+		return formatDate.call(this, new Date(dateObject.getFullYear() + yearsToAdd, dateObject.getMonth() + monthsToAdd, dateObject.getDate() + daysToAdd));
 	};
 
 	/**
-	 * Returns the days that the asked month has
-	 * @param  {Number} month
-	 * @param  {Number} year
-	 * @return {Number}
+	 * Utility functions that the ODate provides
+	 * @type {Object}
 	 */
-	ODate.prototype.daysInMonth = function(month, year) {
-		return 32 - new Date(year, month - 1, 32).getDate();
+	ODate.prototype.utils = {
+		/**
+		 * Returns the days that the asked month has
+		 * @param  {Number} month
+		 * @param  {Number} year
+		 * @return {Number}
+		 */
+		daysInMonth: function(month, year) {
+			return 32 - new Date(year, month - 1, 32).getDate();
+		}
 	};
+
 
 	/**
 	 * Returns a formatted date given a date object and the desired format
 	 * @param  {Date} date A date object
 	 * @return {String}            The formatted date
 	 */
-	ODate.prototype._formatDate = function(date) {
+	function formatDate(date) {
 
 		var expressions = {
 			"dddd": this.regional[this.locale].dayNames[date.getDay()],
 			"ddd": this.regional[this.locale].dayNamesShort[date.getDay()],
-			"dd": this._addZero(date.getDate()),
+			"dd": addZero(date.getDate()),
 			"d": date.getDate(),
 			"mmmm": this.regional[this.locale].monthNames[date.getMonth()],
-			"mmm": this.regional[this.locale].monthNamesShort[date.getMonth() + 1],
-			"mm": this._addZero(date.getMonth() + 1),
+			"mmm": this.regional[this.locale].monthNamesShort[date.getMonth()],
+			"mm": addZero(date.getMonth() + 1),
 			"m": date.getMonth() + 1,
 			"yyyy": date.getFullYear(),
 			"yy": date.getFullYear().toString().substring(2, 4)
@@ -133,15 +149,15 @@ var ODate;
 			}
 		}
 
-		return this.dateFormat.replace(regEx, convert);
-	};
+		return dateFormat.replace(regEx, convert);
+	}
 
 	/**
 	 * Add a leeding zeros to numbers smaller than 10
 	 * @param  {String} value
 	 * @return {String}
 	 */
-	ODate.prototype._addZero = function(value) {
+	function addZero(value) {
 		var result;
 		if (value < 10) {
 			result = "0" + value;
@@ -151,4 +167,5 @@ var ODate;
 
 		return result;
 	};
-}());
+
+}).call(this);
