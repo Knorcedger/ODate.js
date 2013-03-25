@@ -2,7 +2,7 @@
  * A date library providing useful date functions around a today date.
  *
  * @author Achilleas Tsoumitas (https://twitter.com/#!/knorcedger)
- * @version 1.1.0
+ * @version 1.2.0
  * @source https://github.com/Knorcedger/ODate.js
  *
  * @licence http://creativecommons.org/licenses/by/3.0/
