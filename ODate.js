@@ -2,7 +2,7 @@
  * A date library providing useful date functions around a today date.
  *
  * @author Achilleas Tsoumitas (https://twitter.com/#!/knorcedger)
- * @version 1.2.0
+ * @version 1.2.1
  * @source https://github.com/Knorcedger/ODate.js
  *
  * @licence http://creativecommons.org/licenses/by/3.0/
@@ -104,7 +104,8 @@
 			"mm": addZero(date.getMonth() + 1),
 			"m": date.getMonth() + 1,
 			"yyyy": date.getFullYear(),
-			"yy": date.getFullYear().toString().substring(2, 4)
+			"yy": date.getFullYear().toString().substring(2, 4),
+			"timestamp": Math.round(date.getTime() / 1000)
 		};
 
 		//create the regular expression to replace the dateformat with actual data
@@ -125,7 +126,7 @@
 		 * Replaces the expressions found
 		 */
 
-		function convert(str, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, offset, s) {
+		function convert(str, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, offset, s) {
 			if (p1) {
 				return expressions.dddd;
 			} else if (p2) {
@@ -146,6 +147,8 @@
 				return expressions.yyyy;
 			} else if (p10) {
 				return expressions.yy;
+			} else if (p11) {
+				return expressions.timestamp;
 			}
 		}
 
